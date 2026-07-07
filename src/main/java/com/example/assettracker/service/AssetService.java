@@ -3,9 +3,10 @@ package com.example.assettracker.service;
 import com.example.assettracker.dto.AssetResponse;
 import com.example.assettracker.dto.CreateAssetRequest;
 import com.example.assettracker.exception.ResourceNotFoundException;
+import com.example.assettracker.model.Asset;
+import com.example.assettracker.repository.AssetRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -20,65 +21,28 @@ import java.util.List;
 @Service
 public class AssetService {
 
-    // In-memory data store used for teaching/demo purposes only
-    private final List<AssetResponse> assets = new ArrayList<>();
+    private final AssetRepository assetRepository;
 
-    public AssetService() {
-        // Seed with example data so the app has something to return right away.
-        assets.add(new AssetResponse(
-                "A001",
-                "LAP-2026-001",
-                "Dell Latitude 5440",
-                "Laptop",
-                "SN-LAP-001",
-                "AVAILABLE",
-                "HQ Level 3",
-                null
-        ));
-
-        assets.add(new AssetResponse(
-                "A002",
-                "MON-2026-002",
-                "Dell 24-inch Monitor",
-                "Monitor",
-                "SN-MON-002",
-                "ASSIGNED",
-                "HQ Level 2",
-                "amir@example.com"
-        ));
-
-        assets.add(new AssetResponse(
-                "A003",
-                "PRJ-2026-003",
-                "Epson Projector",
-                "Projector",
-                "SN-PRJ-003",
-                "MAINTENANCE",
-                "Training Room 1",
-                null
-        ));
+    public AssetService(AssetRepository assetRepository) {
+        this.assetRepository = assetRepository;
     }
 
-    // Return all assets. Note: returning the internal list directly is simple
-    // for learning but would be unsafe in a concurrent production app.
     public List<AssetResponse> getAllAssets() {
-        return assets;
+        return assetRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    // Find an asset by id or throw a ResourceNotFoundException which is
-    // handled globally by GlobalExceptionHandler.
     public AssetResponse getAssetById(String id) {
-        return assets.stream()
-                .filter(asset -> asset.getId().equalsIgnoreCase(id))
-                .findFirst()
+        Asset asset = assetRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asset " + id + " was not found"));
+
+        return toResponse(asset);
     }
 
-    // Create a new asset from the request DTO. Demonstrates simple mapping
-    // from request -> response DTO and updating the in-memory store.
     public AssetResponse createAsset(CreateAssetRequest request) {
-        AssetResponse created = new AssetResponse(
-                createNextId(),
+        Asset asset = new Asset(
                 request.getAssetTag().trim(),
                 request.getName().trim(),
                 request.getCategory().trim(),
@@ -88,12 +52,20 @@ public class AssetService {
                 null
         );
 
-        assets.add(created);
-        return created;
+        Asset savedAsset = assetRepository.save(asset);
+        return toResponse(savedAsset);
     }
 
-    // Helper to create a simple sequential id. Not thread-safe but fine for demo.
-    private String createNextId() {
-        return "A" + String.format("%03d", assets.size() + 1);
+    private AssetResponse toResponse(Asset asset) {
+        return new AssetResponse(
+                asset.getId(),
+                asset.getAssetTag(),
+                asset.getName(),
+                asset.getCategory(),
+                asset.getSerialNumber(),
+                asset.getStatus(),
+                asset.getLocation(),
+                asset.getAssignedTo()
+        );
     }
 }

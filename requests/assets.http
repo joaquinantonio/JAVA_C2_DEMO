@@ -2,16 +2,17 @@
 GET http://localhost:8080/api/health
 
 
-### Get all assets
+### Get all assets from MongoDB
 GET http://localhost:8080/api/assets
 
 
 ### Get one asset
-GET http://localhost:8080/api/assets/A001
+# Replace the ID below with an actual ID returned by GET /api/assets
+GET http://localhost:8080/api/assets/REPLACE_WITH_REAL_ID
 
 
-### Get asset that does not exist
-GET http://localhost:8080/api/assets/A999
+### Get missing asset
+GET http://localhost:8080/api/assets/000000000000000000000000
 
 
 ### Create a valid asset
@@ -19,11 +20,11 @@ POST http://localhost:8080/api/assets
 Content-Type: application/json
 
 {
-  "assetTag": "LAP-2026-004",
-  "name": "MacBook Air M5",
-  "category": "Laptop",
-  "serialNumber": "SN-LAP-004",
-  "location": "HQ Level 67"
+  "assetTag": "TAB-2026-001",
+  "name": "Samsung Galaxy Tab",
+  "category": "Tablet",
+  "serialNumber": "SN-TAB-001",
+  "location": "HQ Level 4"
 }
 
 
