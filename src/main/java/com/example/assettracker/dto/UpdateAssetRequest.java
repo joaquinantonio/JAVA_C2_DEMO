@@ -1,56 +1,28 @@
-package com.example.assettracker.model;
+package com.example.assettracker.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.validation.constraints.NotBlank;
 
-@Document(collection = "assets")
-public class Asset {
+public class UpdateAssetRequest {
 
-    @Id
-    private String id;
-
-    @Indexed(unique = true)
+    @NotBlank(message = "Asset tag is required")
     private String assetTag;
 
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @Indexed
+    @NotBlank(message = "Category is required")
     private String category;
 
-    @Indexed(unique = true)
+    @NotBlank(message = "Serial number is required")
     private String serialNumber;
 
-    @Indexed
+    @NotBlank(message = "Status is required")
     private String status;
 
-    @Indexed
+    @NotBlank(message = "Location is required")
     private String location;
 
-    @Indexed
     private String assignedTo;
-
-    public Asset() {
-    }
-
-    public Asset(String assetTag, String name, String category, String serialNumber,
-                 String status, String location, String assignedTo) {
-        this.assetTag = assetTag;
-        this.name = name;
-        this.category = category;
-        this.serialNumber = serialNumber;
-        this.status = status;
-        this.location = location;
-        this.assignedTo = assignedTo;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getAssetTag() {
         return assetTag;

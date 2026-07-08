@@ -2,6 +2,7 @@ package com.example.assettracker.service;
 
 import com.example.assettracker.dto.AssetResponse;
 import com.example.assettracker.dto.CreateAssetRequest;
+import com.example.assettracker.dto.UpdateAssetRequest;
 import com.example.assettracker.exception.DuplicateResourceException;
 import com.example.assettracker.exception.InvalidRequestException;
 import com.example.assettracker.exception.ResourceNotFoundException;
@@ -31,6 +32,12 @@ public class AssetService {
             "status",
             "location",
             "assignedTo"
+    );
+
+    private static final Set<String> ALLOWED_STATUSES = Set.of(
+            "AVAILABLE",
+            "ASSIGNED",
+            "MAINTENANCE"
     );
 
     private final AssetRepository assetRepository;
@@ -111,6 +118,38 @@ public class AssetService {
         return toResponse(savedAsset);
     }
 
+    public AssetResponse updateAsset(String id, UpdateAssetRequest request) {
+        logger.info("Updating asset id={}", id);
+
+        Asset asset = assetRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset " + id + " was not found"));
+
+        String assetTag = request.getAssetTag().trim();
+        String serialNumber = request.getSerialNumber().trim();
+        String status = request.getStatus().trim().toUpperCase();
+
+        validateStatus(status);
+
+        if (!asset.getAssetTag().equalsIgnoreCase(assetTag) && assetRepository.existsByAssetTag(assetTag)) {
+            throw new DuplicateResourceException("Asset tag already exists: " + assetTag);
+        }
+
+        if (!asset.getSerialNumber().equalsIgnoreCase(serialNumber) && assetRepository.existsBySerialNumber(serialNumber)) {
+            throw new DuplicateResourceException("Serial number already exists: " + serialNumber);
+        }
+
+        asset.setAssetTag(assetTag);
+        asset.setName(request.getName().trim());
+        asset.setCategory(request.getCategory().trim());
+        asset.setSerialNumber(serialNumber);
+        asset.setStatus(status);
+        asset.setLocation(request.getLocation().trim());
+        asset.setAssignedTo(normalizeOptional(request.getAssignedTo()));
+
+        Asset savedAsset = assetRepository.save(asset);
+        return toResponse(savedAsset);
+    }
+
     private void validatePageRequest(int page, int size, String sortBy, String direction) {
         if (page < 0) {
             throw new InvalidRequestException("Page must be zero or greater");
@@ -127,6 +166,20 @@ public class AssetService {
         if (!direction.equalsIgnoreCase("asc") && !direction.equalsIgnoreCase("desc")) {
             throw new InvalidRequestException("Direction must be either asc or desc");
         }
+    }
+
+    private void validateStatus(String status) {
+        if (!ALLOWED_STATUSES.contains(status)) {
+            throw new InvalidRequestException("Status must be AVAILABLE, ASSIGNED or MAINTENANCE");
+        }
+    }
+
+    private String normalizeOptional(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value.trim();
     }
 
     private boolean hasValue(String value) {

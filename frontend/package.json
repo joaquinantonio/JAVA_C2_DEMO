@@ -1,5 +1,5 @@
 {
-  "name": "asset-tracker-ui-day11",
+  "name": "asset-tracker-ui-day13",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,8 @@
     "@vitejs/plugin-react": "latest",
     "vite": "latest",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "react-dom": "^19.2.1",
+    "react-router": "latest"
   },
   "devDependencies": {}
 }
