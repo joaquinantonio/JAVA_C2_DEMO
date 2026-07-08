@@ -10,6 +10,12 @@
 
 body {
   margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
 }
 
 button,
@@ -55,23 +61,122 @@ p {
   margin-top: 0;
 }
 
-h1 {
-  margin-bottom: 8px;
+.app-header h1,
+.login-card h1,
+.public-page h1 {
+  margin: 0 0 8px;
   font-size: clamp(2rem, 4vw, 3.5rem);
 }
 
 .header-subtitle {
   margin-bottom: 0;
   color: #d8e3f8;
+  max-width: 700px;
 }
 
-.header-badge {
-  flex: 0 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+.user-panel {
+  min-width: 190px;
+  display: grid;
+  gap: 8px;
+  justify-items: end;
+}
+
+.user-panel strong {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.user-panel button,
+.login-form button,
+.button-link {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  color: #172033;
+  background: white;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-link.secondary {
+  background: #dbeafe;
+}
+
+.app-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.app-nav a {
+  text-decoration: none;
+  font-weight: 800;
   padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  font-weight: 700;
+  background: white;
+  color: #334155;
+  border: 1px solid #d9e2ef;
+}
+
+.app-nav a.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+main {
+  display: grid;
+  gap: 20px;
+}
+
+.summary-card,
+.card,
+.login-card,
+.filter-panel,
+.empty-state {
+  background: white;
+  border: 1px solid #d9e2ef;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(23, 32, 51, 0.08);
+}
+
+.card,
+.login-card,
+.filter-panel,
+.empty-state {
+  padding: 20px;
+}
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin: 0 0 6px;
+}
+
+.section-heading p {
+  color: #667085;
+  margin-bottom: 0;
+}
+
+.welcome-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .summary-grid {
@@ -79,16 +184,6 @@ h1 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin: 24px 0;
-}
-
-.summary-card,
-.card,
-.filter-panel,
-.empty-state {
-  background: white;
-  border: 1px solid #d9e2ef;
-  border-radius: 20px;
-  box-shadow: 0 12px 35px rgba(23, 32, 51, 0.08);
 }
 
 .summary-card {
@@ -102,25 +197,6 @@ h1 {
 
 .summary-card strong {
   font-size: 2rem;
-}
-
-.card,
-.filter-panel,
-.empty-state {
-  padding: 20px;
-}
-
-.section-heading {
-  margin-bottom: 18px;
-}
-
-.section-heading h2 {
-  margin-bottom: 6px;
-}
-
-.section-heading p {
-  color: #667085;
-  margin-bottom: 0;
 }
 
 .api-card {
@@ -144,6 +220,17 @@ h1 {
   color: #667085;
   font-size: 0.85rem;
   margin-bottom: 4px;
+}
+
+.info-item strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .filter-panel {
@@ -191,6 +278,7 @@ select {
   align-items: center;
   gap: 12px;
   text-align: left;
+  cursor: pointer;
 }
 
 .asset-row:hover,
@@ -280,12 +368,93 @@ dd {
   color: #667085;
 }
 
+.login-page,
+.public-page {
+  width: min(860px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0;
+  display: grid;
+  gap: 18px;
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.login-form button {
+  background: #3b82f6;
+  color: white;
+  justify-self: start;
+}
+
+.login-help {
+  margin-top: 18px;
+  display: grid;
+  gap: 4px;
+  color: #667085;
+}
+
+.report-list,
+.endpoint-list {
+  display: grid;
+  gap: 10px;
+}
+
+.report-row,
+.endpoint-row {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #f7f9fc;
+  border: 1px solid #d9e2ef;
+}
+
+.report-row {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.report-row strong {
+  font-size: 1.4rem;
+}
+
+.endpoint-row {
+  grid-template-columns: 80px 1fr 130px;
+  align-items: center;
+}
+
+.endpoint-row p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #667085;
+}
+
+code {
+  background: #eef2f7;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
 @media (max-width: 860px) {
   .app-header,
+  .welcome-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-panel {
+    justify-items: start;
+  }
+
   .workspace-grid,
   .filter-panel,
   .summary-grid,
-  .api-info-grid {
+  .api-info-grid,
+  .report-grid,
+  .endpoint-row {
     grid-template-columns: 1fr;
     display: grid;
   }

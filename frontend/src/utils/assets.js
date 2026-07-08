@@ -1,17 +1,17 @@
 export function filterAssets(assets, searchText, statusFilter) {
-  const normalizedSearch = searchText.trim().toLowerCase();
+  const search = searchText.trim().toLowerCase();
 
   return assets.filter((asset) => {
-    const matchesSearch =
-      normalizedSearch.length === 0 ||
-      asset.assetTag.toLowerCase().includes(normalizedSearch) ||
-      asset.name.toLowerCase().includes(normalizedSearch) ||
-      asset.category.toLowerCase().includes(normalizedSearch) ||
-      asset.location.toLowerCase().includes(normalizedSearch);
-
     const matchesStatus = statusFilter === 'ALL' || asset.status === statusFilter;
 
-    return matchesSearch && matchesStatus;
+    const matchesSearch =
+      search.length === 0 ||
+      asset.assetTag.toLowerCase().includes(search) ||
+      asset.name.toLowerCase().includes(search) ||
+      asset.category.toLowerCase().includes(search) ||
+      asset.location.toLowerCase().includes(search);
+
+    return matchesStatus && matchesSearch;
   });
 }
 
