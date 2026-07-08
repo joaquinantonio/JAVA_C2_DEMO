@@ -12,14 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
-/*
- * GlobalExceptionHandler
- * ----------------------
- * Central place to convert Java exceptions into HTTP responses.
- * - @RestControllerAdvice makes these handlers apply across all controllers.
- * - @ExceptionHandler methods deal with specific exception types.
- * - This keeps controller code focused on happy-path logic.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -59,9 +51,23 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(InvalidRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleInvalidRequest(InvalidRequestException exception) {
+        return new ApiErrorResponse(
+                exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                List.of()
+        );
+    }
+
     @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiErrorResponse handleBadCredentials(RuntimeException exception) {
-        return new ApiErrorResponse("Invalid email or password", HttpStatus.UNAUTHORIZED.value(), List.of());
+        return new ApiErrorResponse(
+                "Invalid email or password",
+                HttpStatus.UNAUTHORIZED.value(),
+                List.of()
+        );
     }
 }
