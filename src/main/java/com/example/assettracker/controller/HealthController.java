@@ -20,7 +20,7 @@ public class HealthController {
                 "status", "UP",
                 "service", "asset-tracker-api",
                 "storage", "MongoDB",
-                "lesson", "Day 8 - Queries, Pagination, Indexes, Logging"
+                "security", "JWT - Added on Day 9"
         );
     }
 }

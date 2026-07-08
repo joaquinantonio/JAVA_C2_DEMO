@@ -3,6 +3,8 @@ package com.example.assettracker.exception;
 import com.example.assettracker.dto.ApiErrorResponse;
 import com.example.assettracker.dto.FieldErrorDetail;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -55,5 +57,11 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.value(),
                 List.of()
         );
+    }
+
+    @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrorResponse handleBadCredentials(RuntimeException exception) {
+        return new ApiErrorResponse("Invalid email or password", HttpStatus.UNAUTHORIZED.value(), List.of());
     }
 }
