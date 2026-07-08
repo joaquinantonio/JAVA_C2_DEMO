@@ -19,7 +19,8 @@ public class HealthController {
         return Map.of(
                 "status", "UP",
                 "service", "asset-tracker-api",
-                "storage", "MongoDB - Added on day 7"
+                "storage", "MongoDB",
+                "lesson", "Day 8 - Queries, Pagination, Indexes, Logging"
         );
     }
 }

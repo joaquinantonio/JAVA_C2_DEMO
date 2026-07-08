@@ -1,6 +1,7 @@
 package com.example.assettracker.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "assets")
@@ -9,12 +10,24 @@ public class Asset {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String assetTag;
+
     private String name;
+
+    @Indexed
     private String category;
+
+    @Indexed(unique = true)
     private String serialNumber;
+
+    @Indexed
     private String status;
+
+    @Indexed
     private String location;
+
+    @Indexed
     private String assignedTo;
 
     public Asset() {
@@ -89,9 +102,5 @@ public class Asset {
 
     public String getAssignedTo() {
         return assignedTo;
-    }
-
-    public void setAssignedTo(String assignedTo) {
-        this.assignedTo = assignedTo;
     }
 }

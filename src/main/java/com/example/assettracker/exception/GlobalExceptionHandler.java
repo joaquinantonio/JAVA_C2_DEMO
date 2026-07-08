@@ -46,4 +46,14 @@ public class GlobalExceptionHandler {
                 errors
         );
     }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiErrorResponse handleDuplicateResource(DuplicateResourceException exception) {
+        return new ApiErrorResponse(
+                exception.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                List.of()
+        );
+    }
 }
