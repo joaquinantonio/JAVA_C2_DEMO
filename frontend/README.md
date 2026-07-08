@@ -1,45 +1,41 @@
-# Day 11 Asset Tracker UI
+# Asset Tracker UI - Day 14
 
-This is the trainer demo for Day 11: React Fundamentals.
+Day 14 adds a frontend data layer on top of the working Day 13 application.
 
-## What this demonstrates
+## Focus
 
-- Vite + React project structure
-- JSX
-- Components and props
-- State with `useState`
-- Derived UI with filtering
-- Effects with `useEffect`
-- Loading and error states
-- Layout, list screen, detail screen
-- Basic backend connectivity using public Day 10 endpoints
+- API abstraction layer
+- shared data context
+- reducer-based state management
+- page cache
+- backend pagination
+- client-side filters for the current page
+- optimistic status updates
+- lazy-loaded route modules
 
-## How to run
+## Style freeze
 
-Start the Day 10 Spring Boot backend first:
+The general Day 12/13 visual style is intentionally preserved. Day 14 focuses on data behaviour, not redesign.
+
+## Run
+
+Start Spring Boot first:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Then run the React app:
+Then run the frontend:
 
 ```bash
-cd asset-tracker-ui-day11
+cd frontend
 npm install
 npm run dev
 ```
 
-Open:
+Login with:
 
 ```text
-http://localhost:5173
+admin@example.com
+Admin@12345
 ```
-
-The app uses Vite's dev server proxy so frontend requests to `/api/...` are forwarded to the Spring Boot backend on `http://localhost:8080`.
-
-## Important teaching note
-
-The asset list uses local sample data on Day 11. This keeps the focus on React fundamentals.
-
-The app only fetches public API information from the Day 10 backend. Protected asset API fetching will be handled later after students learn login, routing, protected pages, and API data patterns.
