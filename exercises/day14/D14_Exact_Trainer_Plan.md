@@ -1,4 +1,4 @@
-# Day 14 Exact Trainer Plan - Data Fetching Patterns & State Management
+# Day 14 Exact Instructor Plan - Data Fetching Patterns & State Management
 
 ## 9:00 - 9:20 Recap Day 13
 
