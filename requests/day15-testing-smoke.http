@@ -1,0 +1,39 @@
+### Day 15 backend readiness checks
+### Use this before running the Playwright E2E smoke test.
+### Run Spring Boot first: mvn spring-boot:run
+
+### Health check
+GET http://localhost:8080/api/health
+
+
+### Login as seeded admin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+
+### Copy token from the login response
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6ImFzc2V0LXRyYWNrZXItYXBpIiwibmFtZSI6IkFkbWluIFVzZXIiLCJleHAiOjE3ODYwNzgwNDksImlhdCI6MTc4NjA3NDQ0OSwidXNlcklkIjoiNmE1OWFjNmU2NjI3NTNjYjY0MjhhZDk1In0.xpGc8bjp5PW0UKNqF40wBZXonkPKapTgP9TbY5lMkVc
+
+
+### Confirm protected paged assets endpoint works
+GET http://localhost:8080/api/v1/assets/paged?page=0&size=5&sortBy=assetTag&direction=asc
+Authorization: Bearer {{token}}
+
+
+### Confirm create endpoint works before E2E
+POST http://localhost:8080/api/v1/assets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "assetTag": "DAY15-HTTP-001",
+  "name": "Day 15 Test Asset",
+  "category": "Testing",
+  "serialNumber": "SN-DAY15-HTTP-001",
+  "location": "Testing Lab"
+}

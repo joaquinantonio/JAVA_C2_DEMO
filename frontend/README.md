@@ -1,41 +1,37 @@
-# Asset Tracker UI - Day 14
+# Asset Tracker UI - Day 15
 
-Day 14 adds a frontend data layer on top of the working Day 13 application.
+Day 15 adds frontend tests and a light end-to-end smoke test to the Day 14 React application.
 
-## Focus
+## Install dependencies
 
-- API abstraction layer
-- shared data context
-- reducer-based state management
-- page cache
-- backend pagination
-- client-side filters for the current page
-- optimistic status updates
-- lazy-loaded route modules
+```bash
+npm install
+```
 
-## Style freeze
+## Run component/unit tests
 
-The general Day 12/13 visual style is intentionally preserved. Day 14 focuses on data behaviour, not redesign.
+```bash
+npm run test
+```
 
-## Run
+## Run tests in watch mode
 
-Start Spring Boot first:
+```bash
+npm run test:watch
+```
+
+## Run E2E smoke test
+
+Start the Spring Boot backend first:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Then run the frontend:
+Then run:
 
 ```bash
-cd frontend
-npm install
-npm run dev
+npm run test:e2e
 ```
 
-Login with:
-
-```text
-admin@example.com
-Admin@12345
-```
+The Playwright test starts the Vite frontend automatically and expects the backend at `http://localhost:8080`.

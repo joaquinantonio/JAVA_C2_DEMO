@@ -17,17 +17,26 @@ export default function OptimisticStatusControls({ asset, updatingId, onStatusCh
         </p>
       </div>
       <div className="action-row">
-        {STATUSES.map((status) => (
-          <button
-            key={status}
-            type="button"
-            className={status === asset.status ? 'button-link' : 'button-link secondary'}
-            disabled={isUpdating || status === asset.status}
-            onClick={() => onStatusChange(asset.id, status)}
-          >
-            {status}
-          </button>
-        ))}
+        {STATUSES.map((status) => {
+          const isCurrentStatus = status === asset.status;
+
+          return (
+            <button
+              key={status}
+              type="button"
+              className={
+                isCurrentStatus
+                  ? 'status-action-button status-action-active'
+                  : 'status-action-button'
+              }
+              disabled={isUpdating || isCurrentStatus}
+              aria-pressed={isCurrentStatus}
+              onClick={() => onStatusChange(asset.id, status)}
+            >
+              {status}
+            </button>
+          );
+        })}
       </div>
       {isUpdating && <p className="message loading-message">Saving status change...</p>}
     </section>

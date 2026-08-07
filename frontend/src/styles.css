@@ -568,3 +568,34 @@ button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
+
+.status-action-button {
+  border: 1px solid #d9e2ef;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  color: #334155;
+  background: #f8fafc;
+}
+
+.status-action-button:hover:not(:disabled) {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.status-action-active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.status-action-button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.status-action-button:focus-visible {
+  outline: 3px solid #bfdbfe;
+  outline-offset: 2px;
+}
