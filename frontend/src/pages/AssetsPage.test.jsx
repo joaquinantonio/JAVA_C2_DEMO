@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import AssetsPage from './AssetsPage.jsx';
 import { AuthProvider } from '../context/AuthContext.jsx';
@@ -37,9 +37,10 @@ describe('AssetsPage', () => {
     ).toBeInTheDocument();
 
     expect(screen.getByText('Samsung Monitor')).toBeInTheDocument();
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      '/api/v1/assets/paged?page=0&size=5&sortBy=assetTag&direction=asc',
-      expect.objectContaining({ method: 'GET' })
-    );
+
+    const [url, options] = globalThis.fetch.mock.calls[0];
+
+    expect(url).toBe('/api/v1/assets/paged?page=0&size=5&sortBy=assetTag&direction=asc');
+    expect(options.method ?? 'GET').toBe('GET');
   });
 });

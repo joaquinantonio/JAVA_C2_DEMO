@@ -50,6 +50,7 @@ export function storeAdminAuth() {
     token: 'test-admin-token',
     tokenType: 'Bearer',
     expiresInMinutes: 60,
+    expiresAt: Date.now() + 60 * 60 * 1000,
     user: {
       id: 'U001',
       name: 'Admin User',

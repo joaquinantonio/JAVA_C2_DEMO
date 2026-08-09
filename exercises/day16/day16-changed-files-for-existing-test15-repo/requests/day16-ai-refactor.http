@@ -1,0 +1,81 @@
+### Day 16: AI-assisted refactor verification
+### Purpose: prove behaviour is unchanged after refactoring.
+### Run Spring Boot first: mvn spring-boot:run
+
+### Login as seeded admin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+
+### Copy token from login response
+@token = PASTE_ADMIN_TOKEN_HERE
+
+
+### Get protected asset list - should still work
+GET http://localhost:8080/api/v1/assets
+Authorization: Bearer {{token}}
+
+
+### Create asset - should still work
+POST http://localhost:8080/api/v1/assets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "assetTag": "REFAC-2026-001",
+  "name": "Refactor Test Asset",
+  "category": "Camera",
+  "serialNumber": "SN-REFAC-001",
+  "location": "Training Lab"
+}
+
+
+### Duplicate create - should still return 409 Conflict
+POST http://localhost:8080/api/v1/assets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "assetTag": "REFAC-2026-001",
+  "name": "Duplicate Refactor Test Asset",
+  "category": "Camera",
+  "serialNumber": "SN-REFAC-002",
+  "location": "Training Lab"
+}
+
+
+### Update asset - replace id with an existing asset id
+PUT http://localhost:8080/api/v1/assets/PASTE_EXISTING_ASSET_ID_HERE
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "assetTag": "REFAC-2026-001",
+  "name": "Refactor Test Asset Updated",
+  "category": "Camera",
+  "serialNumber": "SN-REFAC-001",
+  "status": "ASSIGNED",
+  "location": "Training Lab",
+  "assignedTo": "trainer@example.com"
+}
+
+
+### Invalid status - should still return 400 Bad Request
+PUT http://localhost:8080/api/v1/assets/PASTE_EXISTING_ASSET_ID_HERE
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "assetTag": "REFAC-2026-001",
+  "name": "Refactor Test Asset Updated",
+  "category": "Camera",
+  "serialNumber": "SN-REFAC-001",
+  "status": "BROKEN",
+  "location": "Training Lab",
+  "assignedTo": "trainer@example.com"
+}
