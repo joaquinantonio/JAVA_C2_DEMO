@@ -186,6 +186,14 @@ public class AssetService {
         return value != null && !value.isBlank();
     }
 
+    public void deleteAsset(String id) {
+        if (!assetRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Asset " + id + " was not found");
+        }
+        assetRepository.deleteById(id);
+        logger.info("Deleted asset id={}", id);
+    }
+
     private AssetResponse toResponse(Asset asset) {
         return new AssetResponse(
                 asset.getId(),
