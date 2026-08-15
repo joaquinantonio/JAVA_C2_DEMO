@@ -1,52 +1,43 @@
 package com.example.assettracker.controller;
 
-import java.time.Instant;
-import java.util.Map;
-
-import org.bson.Document;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import com.example.assettracker.repository.AssetRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/readiness")
 public class ReadinessController {
 
-    private final MongoTemplate mongoTemplate;
+    private final AssetRepository assetRepository;
 
-    public ReadinessController(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
+    public ReadinessController(AssetRepository assetRepository) {
+        this.assetRepository = assetRepository;
     }
 
-    @GetMapping("/readiness")
+    @GetMapping
     public ResponseEntity<Map<String, Object>> readiness() {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("service", "asset-tracker-api");
+        response.put("timestamp", Instant.now().toString());
+
         try {
-            Document result = mongoTemplate.executeCommand("{ ping: 1 }");
-            Object okValue = result.get("ok");
-            boolean mongoReady = okValue instanceof Number number && number.doubleValue() == 1.0;
-
-            if (!mongoReady) {
-                return ResponseEntity.status(503).body(Map.of(
-                        "status", "NOT_READY",
-                        "database", "MongoDB ping did not return ok=1",
-                        "checkedAt", Instant.now().toString()
-                ));
-            }
-
-            return ResponseEntity.ok(Map.of(
-                    "status", "READY",
-                    "database", "MongoDB connection is ready",
-                    "checkedAt", Instant.now().toString()
-            ));
-        } catch (Exception ex) {
-            return ResponseEntity.status(503).body(Map.of(
-                    "status", "NOT_READY",
-                    "database", "MongoDB connection failed",
-                    "error", ex.getClass().getSimpleName(),
-                    "checkedAt", Instant.now().toString()
-            ));
+            long assetCount = assetRepository.count();
+            response.put("status", "READY");
+            response.put("database", "CONNECTED");
+            response.put("assetCount", assetCount);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException exception) {
+            response.put("status", "NOT_READY");
+            response.put("database", "UNAVAILABLE");
+            response.put("message", "Database readiness check failed");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
         }
     }
 }
